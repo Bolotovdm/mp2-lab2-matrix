@@ -80,25 +80,40 @@ TEST(TVector, throws_when_set_element_with_too_large_index)
 	ASSERT_ANY_THROW(v[MAX_VECTOR_SIZE + 1] = 9);
 }
 
-//TEST(TVector, can_assign_vector_to_itself)
-//{
-//  ADD_FAILURE();
-//}
-//
-//TEST(TVector, can_assign_vectors_of_equal_size)
-//{
-//  ADD_FAILURE();
-//}
-//
+TEST(TVector, can_assign_vector_to_itself)
+{
+	TVector<int> v(5);
+	for (int i = 0; i < 5; i++)
+		v[i] = i;
+
+	ASSERT_NO_THROW(v=v);
+}
+
+TEST(TVector, can_assign_vectors_of_equal_size)
+{
+	TVector<int> v(5);
+	TVector<int> v1(5);
+
+	ASSERT_NO_THROW(v1 = v);
+}
+
 //TEST(TVector, assign_operator_change_vector_size)
 //{
-//  ADD_FAILURE();
-//}
+//	TVector<int> v(5);
+//	TVector<int> v1(10);
 //
-//TEST(TVector, can_assign_vectors_of_different_size)
-//{
-//  ADD_FAILURE();
+//	int a = v.GetSize; // надо &
+//
+//	EXPECT_EQ(10, v.GetSize);
 //}
+
+TEST(TVector, can_assign_vectors_of_different_size)
+{
+	TVector<int> v(5);
+	TVector<int> v1(10);
+
+	ASSERT_NO_THROW(v1 = v);
+}
 
 TEST(TVector, compare_equal_vectors_return_true)
 {
@@ -207,11 +222,13 @@ TEST(TVector, can_add_vectors_with_equal_size)
 	EXPECT_EQ(v2, v + v1);
 }
 
-//TEST(TVector, cant_add_vectors_with_not_equal_size)
-//{
-//
-//  ADD_FAILURE();
-//}
+TEST(TVector, cant_add_vectors_with_not_equal_size)
+{
+	TVector<int> v(3);
+	TVector<int> v1(5);
+  
+	ASSERT_ANY_THROW(v+v1);
+}
 
 TEST(TVector, can_subtract_vectors_with_equal_size)
 {
@@ -233,10 +250,13 @@ TEST(TVector, can_subtract_vectors_with_equal_size)
 	EXPECT_EQ(v, v2 - v1);
 }
 
-//TEST(TVector, cant_subtract_vectors_with_not_equal_size)
-//{
-//  ADD_FAILURE();
-//}
+TEST(TVector, cant_subtract_vectors_with_not_equal_size)
+{
+	TVector<int> v(3);
+	TVector<int> v1(5);
+
+	ASSERT_ANY_THROW(v - v1);
+}
 
 TEST(TVector, can_multiply_vectors_with_equal_size)
 {
@@ -255,8 +275,11 @@ TEST(TVector, can_multiply_vectors_with_equal_size)
 	EXPECT_EQ(A, v * v1);
 }
 
-//TEST(TVector, cant_multiply_vectors_with_not_equal_size)
-//{
-//  ADD_FAILURE();
-//}
+TEST(TVector, cant_multiply_vectors_with_not_equal_size)
+{
+	TVector<int> v(3);
+	TVector<int> v1(5);
+
+	ASSERT_ANY_THROW(v * v1);
+}
 
