@@ -102,9 +102,11 @@ TEST(TVector, can_assign_vectors_of_equal_size)
 //	TVector<int> v(5);
 //	TVector<int> v1(10);
 //
-//	int a = v.GetSize; // надо &
+//	v = v1;
 //
-//	EXPECT_EQ(10, v.GetSize);
+//	int a = v.GetSize;
+//
+//	EXPECT_EQ(10, a);
 //}
 
 TEST(TVector, can_assign_vectors_of_different_size)
