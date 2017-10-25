@@ -27,16 +27,22 @@ TEST(TMatrix, can_create_copied_matrix)
 TEST(TMatrix, copied_matrix_is_equal_to_source_one)
 {
 	TMatrix<int> m(5);
+	m[0][0] = 1;
+	m[1][1] = 2;
+	m[2][2] = 3;
+	TMatrix<int> m1(m);
 
-	ASSERT_NO_THROW(TMatrix<int> m1(m));
+	EXPECT_EQ(1, m1[0][0]);
+	EXPECT_EQ(2, m1[1][1]);
+	EXPECT_EQ(3, m1[2][2]);
 }
 
 TEST(TMatrix, copied_matrix_has_its_own_memory)
 {
 	TMatrix<int> m(5);
-	TMatrix<int> m1(9);  // не работает при m1(15)
-
-	ASSERT_NO_THROW(TMatrix<int> m1(m));
+	TMatrix<int> m1(m); 
+	
+	EXPECT_NE( &(m[0][0]), &(m1[0][0]));
 }
 
 TEST(TMatrix, can_get_size)
@@ -61,12 +67,12 @@ TEST(TMatrix, throws_when_set_element_with_negative_index)
 	ASSERT_ANY_THROW(m[-2][-4]=7);
 }
 
-//TEST(TMatrix, throws_when_set_element_with_too_large_index)
-//{
-//	TMatrix<int> m(5);
-//
-//	ASSERT_ANY_THROW(m[MAX_MATRIX_SIZE + 1 +1][MAX_MATRIX_SIZE + 1 +1] = 7); 
-//}
+TEST(TMatrix, throws_when_set_element_with_too_large_index)
+{
+	TMatrix<int> m(5);
+
+	ASSERT_ANY_THROW(m[6][7] = 7); 
+}
 
 TEST(TMatrix, can_assign_matrix_to_itself)
 {
@@ -78,29 +84,50 @@ TEST(TMatrix, can_assign_matrix_to_itself)
 TEST(TMatrix, can_assign_matrices_of_equal_size)
 {
 	TMatrix<int> m(5);
+	m[0][0] = 1;
+	m[0][1] = 2;
+	m[3][3] = 3;
 	TMatrix<int> m1(5);
-  
-	ASSERT_NO_THROW(m = m1);
+	m1[0][1] = 1;
+	m1[2][2] = 2;
+	m1[3][4] = 3;
+
+	m = m1;
+	
+	EXPECT_EQ(1, m[0][0] == m1[0][0]);
+	EXPECT_EQ(1, m[1][1] == m1[1][1]);
+	EXPECT_EQ(1, m[0][3] == m1[0][3]);
 }
 
-//TEST(TMatrix, assign_operator_change_matrix_size)
-//{
-//	TMatrix<int> m(5);
-//	TMatrix<int> m1(10);
-//
-//	m = m1;
-//
-//	int a = m.GetSize;
-//
-//	EXPECT_EQ(10, a);
-//}
+TEST(TMatrix, assign_operator_change_matrix_size)
+{
+	TMatrix<int> m(5);
+	TMatrix<int> m1(10);
+
+	m = m1;
+
+	int a = m.GetSize();
+
+	EXPECT_EQ(10, a);
+}
 
 TEST(TMatrix, can_assign_matrices_of_different_size)
 {
 	TMatrix<int> m(5);
-	TMatrix<int> m1(9);
+	m[0][0] = 1;
+	m[0][1] = 2;
+	m[3][3] = 3;
 
-	ASSERT_NO_THROW(m1 = m); // почему не работает ASSERT_NO_THROW(m = m1);
+	TMatrix<int> m1(9);
+	m[0][0] = 1;
+	m[0][1] = 2;
+	m[3][3] = 3;
+
+	m=m1;
+
+	EXPECT_EQ(1, m[0][0] == m1[0][0]);
+	EXPECT_EQ(1, m[1][1] == m1[1][1]);
+	EXPECT_EQ(1, m[0][3] == m1[0][3]);
 }
 
 TEST(TMatrix, compare_equal_matrices_return_true)

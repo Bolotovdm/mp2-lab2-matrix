@@ -33,15 +33,19 @@ TEST(TVector, copied_vector_is_equal_to_source_one)
 {
 	TVector<int> v(5);
 	
-	ASSERT_NO_THROW(TVector<int> v1(v));
+	v[0] = 2;
+	v[3] = -1;
+	
+	TVector<int> v1(v);
+
+	EXPECT_EQ(2, v1[0]);
+	EXPECT_EQ(-1, v1[3]);
 }
 
 TEST(TVector, copied_vector_has_its_own_memory)
 {
-	TVector<int> v1(5);
-	TVector<int> v(10);
-
-  ASSERT_NO_THROW(TVector<int> v1(v));
+	TVector<int> v1(5), v2(v1);
+	EXPECT_NE( &(v1[0]), &(v2[0]));
 }
 
 TEST(TVector, can_get_size)
@@ -75,9 +79,9 @@ TEST(TVector, throws_when_set_element_with_negative_index)
 
 TEST(TVector, throws_when_set_element_with_too_large_index)
 {
-	TVector<int> v(4);
+	TVector<int> v(4, 1);
 
-	ASSERT_ANY_THROW(v[MAX_VECTOR_SIZE + 1] = 9);
+	ASSERT_ANY_THROW(v[7] = 9);
 }
 
 TEST(TVector, can_assign_vector_to_itself)
@@ -92,41 +96,59 @@ TEST(TVector, can_assign_vector_to_itself)
 TEST(TVector, can_assign_vectors_of_equal_size)
 {
 	TVector<int> v(5);
-	TVector<int> v1(5);
-
-	ASSERT_NO_THROW(v1 = v);
-}
-
-//TEST(TVector, assign_operator_change_vector_size)
-//{
-//	TVector<int> v(5);
-//	TVector<int> v1(10);
-//
-//	v = v1;
-//
-//	int a = v.GetSize;
-//
-//	EXPECT_EQ(10, a);
-//}
-
-TEST(TVector, can_assign_vectors_of_different_size)
-{
-	TVector<int> v(5);
-	TVector<int> v1(10);
-
-	ASSERT_NO_THROW(v1 = v);
-}
-
-TEST(TVector, compare_equal_vectors_return_true)
-{
-	TVector<int> v(5);
 	for (int i = 0; i < 5; i++)
 		v[i] = i;
 
 	TVector<int> v1(5);
 
 	v1 = v;
+
 	EXPECT_EQ(v1, v);
+}
+
+TEST(TVector, assign_operator_change_vector_size)
+{
+	TVector<int> v(5);
+	TVector<int> v1(10);
+
+	v = v1;
+
+	int a = v.GetSize();
+
+	EXPECT_EQ(10, a);
+}
+
+TEST(TVector, can_assign_vectors_of_different_size)
+{
+	TVector<int> v(5);
+	v[0] = 6;
+	v[1] = 7;
+	v[2] = 8;
+
+	TVector<int> v1(10);
+	v1[0] = 10;
+	v1[1] = 17;
+	v1[2] = 18;
+
+	v=v1;
+	EXPECT_EQ(1, v[0] == v1[0]);
+	EXPECT_EQ(1, v[1] == v1[1]);
+	EXPECT_EQ(1, v[2] == v1[2]);
+}
+
+TEST(TVector, compare_equal_vectors_return_true)
+{
+	TVector<int> v(5);
+	v[0] = 6;
+	v[1] = 7;
+	v[2] = 8;
+
+	TVector<int> v1(5);
+	v1[0] = 6;
+	v1[1] = 7;
+	v1[2] = 8;
+
+	EXPECT_EQ(1, v1 == v);
 }
 
 TEST(TVector, compare_vector_with_itself_return_true)
@@ -135,8 +157,7 @@ TEST(TVector, compare_vector_with_itself_return_true)
 	for (int i = 0; i < 5; i++)
 		v[i] = i;
 
-	v = v;
-	EXPECT_EQ(v, v);
+	EXPECT_EQ(1, v == v);
 }
 
 TEST(TVector, vectors_with_different_size_are_not_equal)

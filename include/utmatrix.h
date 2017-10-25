@@ -65,7 +65,7 @@ TVector<ValType>::TVector(int s, int si)
 	if ((s < 0) || (s > MAX_VECTOR_SIZE))
 		throw ("Error");
 
-	if ( (si<0) /*|| (si > s)*/) 
+	if ( (si<0)) 
 		throw ("Error" );
 
 	Size = s;
@@ -92,7 +92,7 @@ TVector<ValType>::~TVector()
 template <class ValType> // доступ
 ValType& TVector<ValType>::operator[](int pos)
 {
-	if ((pos<0) || (pos> MAX_VECTOR_SIZE))
+	if ((pos<0) || (pos>= Size + StartIndex))
 		throw ("Error");
 
 	return pVector[pos-StartIndex];
@@ -135,6 +135,8 @@ TVector<ValType>& TVector<ValType>::operator=(const TVector &v)
 {
 	Size = v.Size;
 	StartIndex = v.StartIndex;
+	delete [] pVector; 
+	pVector = new ValType[Size];
 	for (int i = 0; i <Size; i++)
 		pVector[i] = v.pVector[i];
 	return *this;
@@ -274,7 +276,7 @@ TMatrix<ValType>::TMatrix(const TMatrix<ValType> &mt):
 	this->StartIndex = mt.StartIndex;
 	this->pVector = new TVector<ValType>[Size];
 	for (int i = 0; i < this->Size; i++)
-		pVector[i] = TVector<ValType>(Size - i, i);
+		pVector[i] = mt.pVector[i];
 }/*-------------------------------------------------------------------------*/
 
 template <class ValType> // конструктор преобразования типа
@@ -303,24 +305,29 @@ bool TMatrix<ValType>::operator==(const TMatrix<ValType> &mt) const
 template <class ValType> // сравнение
 bool TMatrix<ValType>::operator!=(const TMatrix<ValType> &mt) const
 {
-	if (Size == mt.Size)
-		return (0);
-	else
-	{
-		for (int i = 0; i < Size; i++)
-			if (pVector[i] == mt.pVector[i])
-				return 0;
+	//return TVector< TVector <ValType> >::operator!=(mt);
 
-		return 1;
-	}
+	//if (Size == mt.Size)
+	//	return (0);
+	//else
+	//{
+	//	for (int i = 0; i < Size; i++)
+	//		if (pVector[i] == mt.pVector[i])
+	//			return 0;
+
+	//	return 1;
+	//}
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // присваивание
 TMatrix<ValType>& TMatrix<ValType>::operator=(const TMatrix<ValType> &mt)
 {
-	Size = mt.Size;
-	for (int i = 0; i < Size; i++)
-		pVector[i] = mt.pVector[i];
+	TVector< TVector <ValType> >::operator=(mt);
+	//Size = mt.Size;
+	//delete [] pVector;
+	//pVector = new TVector<ValType>[Size];
+	//for (int i = 0; i < Size; i++)
+	//	pVector[i] = mt.pVector[i];
 
 	return *this;
 } /*-------------------------------------------------------------------------*/
