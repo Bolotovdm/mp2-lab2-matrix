@@ -159,7 +159,7 @@ TEST(TMatrix, matrices_with_different_size_are_not_equal)
 	TMatrix<int> m(2);
 	TMatrix<int> m1(3);
   
-	EXPECT_EQ(1, m != m1);
+	EXPECT_EQ(0, m != m1);
 }
 
 TEST(TMatrix, can_add_matrices_with_equal_size)
